@@ -3,48 +3,42 @@ title: Choosing between Slice and Protobuf
 description: Learn why you need an IDL and which IDL makes the most sense for you.
 ---
 
-## What are Slice and Protobuf?
+## Slice 和 Protobuf 是什么?
 
-IceRPC is at its core a byte-oriented RPC framework: it allows you to easily send requests that carry bytes and receive
-responses that carry more bytes.
+IceRPC的核心是一个面向字节`bytes`的RPC框架 : 它可以轻松地发送携带字节的请求`requests`,并接收携带更多字节的响应`responses`.
 
-This byte-centric architecture and API is exactly what you want if you are moving bytes around. However, it's not
-particularly convenient if you want to define a typed network API for your RPC services.
+IceRPC以字节为中心的体系结构和API,正是我们移动字节时所需要的功能。然而，如果想为RPC服务定义一个类型化的网络API，并不特别方便.
 
-In the context of RPCs, it is very common to use an [Interface Definition Language] (IDL) to specify your RPCs. These
-definitions are also known as the "contract" between your client and your server.
+在RPCs的上下文中，使用[接口定义语言]（IDL）来指定RPCs是非常常见的. 这些
+定义也称为客户端和服务器之间的`契约`[`contract`]
 
-A code generator then produces code from these definitions. This generated code:
+代码生成器，根据这些定义[`contract`]生成代码，有如下功能:
 
-- provides a typed API in the programming language of your choice
-- implements this API by encoding/decoding typed data (integers, strings, structs, etc.) into and from stream of bytes
-in a well-defined format
+- 通过选择的编程语言，提供类型化的API
+- 通过将类型化数据（整数、字符串、structs等）编码/解码`encoding/decoding`到字节流中,或从字节流中解码,来实现此API,以方便定义友好的结构格式
 
-With an IDL, you don't need to worry about encoding and decoding data structures into and from a portable binary format:
-it's all handled by the generated code and its supporting libraries.
+使用IDL，完全不必担心如上细节。将数据结构，编码为可移植二进制格式和将其解码为可移植的二进制格式:
+所有这些都由代码生成器，及其支持库来处理.
 
-IceRPC includes full support for two IDLs and their associated serialization formats: [Slice] and [Protobuf]. Let's
-figure out which one you should pick!
+IceRPC 完全支持两个IDL及其相关的序列化格式: [Slice] and [Protobuf]. 来看看，应该选哪个!
 
 ## Slice
 
-Slice is a modern IDL and serialization format that was developed in tandem with IceRPC. It takes full advantage of all
-of IceRPC's features and is very compact, both in terms of code size and bandwidth usage.
+Slice是与IceRPC协同开发的现代IDL和序列化格式. 它充分利用了所有
+IceRPC的特性，并且在代码大小和带宽使用方面都非常紧凑.
 
-For example, IceRPC supports one-way RPCs (fire and forget with no response), and Slice provides one-way operations that
-map to these one-way RPCs. On the other hand, a Protobuf RPC method always returns a response; as a result, you can't
-send a one-way RPC using Protobuf.
+例如，IceRPC支持单向RPCs（发送后不理会），Slice提供单向操作
+映射到这些单向RPCs. 而Protobuf RPC方法总是返回一个响应,不支持使用Protobuf发送单向RPCs.
 
-You could see Slice as the default IDL for IceRPC: use Slice unless you have a compelling reason to go with Protobuf.
+可以将Slice视为IceRPC的默认IDL：除非有充分的理由使用Protobuf，否则请使用Slice.
 
 ## Protobuf
 
-Protobuf (or Protocol Buffers) is a popular IDL and serialization format created by Google. It's a common binary
-alternative to JSON, used extensively within Google.
+Protobuf（Protocol Buffers）是Google创建的一种流行的IDL和序列化格式。这是一个常见的二进制JSON的替代方案，在谷歌内部广泛使用.
 
-If you are already familiar with Protobuf or your application interacts with other applications that consume or send
-Protobuf messages, you should use IceRPC together with Protobuf.
+如果已经熟悉Protobuf，或者您的应用程序与使用或发送的其他应用程序交互
+Protobuf消息，应该将IceRPC与Protobuf一起使用.
 
-[Interface Definition Language]: https://en.wikipedia.org/wiki/Interface_description_language
+[接口定义语言]: https://en.wikipedia.org/wiki/Interface_description_language
 [Protobuf]: https://en.wikipedia.org/wiki/Protocol_Buffers
 [Slice]: ../slice

@@ -12,7 +12,7 @@
 2. 服务端接受此请求，并将此请求发送到已提供的`服务实现`
 3. 服务端返回响应，IceRPC 将此响应带回客户端
 
-![A RPC from client to server](https://zeroc。com/blogs/other-way-around/rpc-from-client-to-server.svg)
+![A RPC from client to server](https://zeroc.com/blogs/other-way-around/rpc-from-client-to-server.svg)
 
 IceRPC 提供的几乎所有示例，都是这个客户端到服务器的模式。尽管如此，我们可以使用 IceRPC 试试另一种发送方式。
 
@@ -77,7 +77,7 @@ await alarm.SomeOpAsync();
 
 服务器无法打开与客户端的连接（由于防火墙或其他网络限制）， 因此,我们希望使用现有的客户端到服务器连接来执行这些通知。
 
-![Push notification example](https://zeroc。com/blogs/other-way-around/push-notification-example.svg)
+![Push notification example](https://zeroc.com/blogs/other-way-around/push-notification-example.svg)
 
 我们可以使用以下 Slice 接口对这种交互进行模拟:
 
@@ -195,11 +195,11 @@ interface Sensor {
 
 解决方案：引入客户端和设备都连接的中介服务器。 该服务器通常部署在"云中",并将请求从客户端路由到设备（反之亦然,如果需要）。 从客户端到设备的请求，通过客户端到服务器的连接,然后通过服务器到设备的连接。 这种方式对 IceRPC 来说，非常好处理:
 
-![Thermostat example](https://zeroc。com/blogs/other-way-around/thermostat-example.svg)
+![Thermostat example](https://zeroc.com/blogs/other-way-around/thermostat-example.svg)
 
 通过此示例,客户端可以更改恒温器`thermostat`上的设定点,并等待恒温器的确认:例如"确定"或故障—,因为指定的设定点太低:
 
-![Thermostat client](https://zeroc。com/_next/image?url=%2Fblogs%2Fother-way-around%2Fthermostat-client.png&w=1200&q=75)
+![Thermostat client](https://zeroc.com/_next/image?url=%2Fblogs%2Fother-way-around%2Fthermostat-client.png&w=1200&q=75)
 
 恒温器`Thermostat`示例在服务器 `DeviceConnection` 类中实现自己的终端调用器
 
@@ -241,4 +241,4 @@ internal class DeviceConnection : IInvoker
 
 反向调用生成 RPC 是一个强大的功能,是 IceRPC 与其他 RPC 框架区分的主要功能。 可以利用此功能构建，具有有意义的语义的网络应用程序,而且这些应用程序可以在防火墙上开心地正常工作。
 
-[Thermostat]: https://github。com/xlgwr/icerpc-csharp/tree/main/examples/slice/Thermostat
+[Thermostat]: https://github.com/xlgwr/icerpc-csharp/tree/main/examples/slice/Thermostat

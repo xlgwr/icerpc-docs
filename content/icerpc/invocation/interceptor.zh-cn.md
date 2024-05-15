@@ -1,23 +1,17 @@
----
-title: Interceptor
-description: Learn how to write an interceptor and how to install an interceptor in your invocation pipeline.
----
+# 拦截器 Interceptor
 
-## Intercepting outgoing requests
+> 了解如何编写拦截器以及如何在调用管道中安装拦截器。
 
-An interceptor is a piece of code that intercepts an outgoing request before it's sent over the network connection. The
-same code also intercepts the incoming response returned by the remote service before it reaches the caller.
+## 拦截传出的请求
 
-At a more technical level, an interceptor is an [invoker](invocation-pipeline#the-invoker-abstraction) that holds
-another invoker ("next") and calls `invoke` on this next invoker as part of the implementation of its own `invoke`
-method. This next invoker can be a client connection, a connection cache`, another interceptor, or some other kind of
-invoker; as far as the interceptor is concerned, it's just another invoker.
+拦截器是在通过网络连接发送传出请求之前拦截传出请求的代码。 相同的代码还会在远程服务到达调用者之前拦截它返回的传入响应。
 
-An interceptor can include logic before calling `invoke` on the next invoker (before the request is sent) and after
-calling `invoke` on the next invoker (after it receives the response). An interceptor can also short-circuit the
-invocation pipeline returning a cached response or throwing an exception.
+在技术层面上，拦截器是持有另一个调用器(`next`)并在下一个调用器上调用，调用的调用器`invoke`，作为其自己的调用方法实现的一部分。
+  下一个调用器可以是客户端连接、连接缓存、另一个拦截器或其他类型的调用器；就拦截器而言，它只是另一个调用器。
 
-For example, a simple C# interceptor could look like:
+拦截器可以在调用下一个调用器调用调用之前（在发送请求之前）和调用下一个调用器调用调用之后（在收到响应之后）包含逻辑。 拦截器还可以使调用管道短路，返回缓存响应或抛出异常。
+
+例如,一个简单的 C# 拦截器可能如下所示:
 
 ```csharp
 public class SimpleInterceptor : IInvoker
@@ -36,12 +30,11 @@ public class SimpleInterceptor : IInvoker
 }
 ```
 
-## Installing an interceptor
+## 安装拦截器
 
-In C#, you can create an invocation pipeline by creating an instance of class [Pipeline] and then calling `Use{Name}`
-extension methods to install interceptors on this pipeline.
+C# 中,您可以通过创建类 `Pipeline` 的实例,然后调用 `Use{Name}` 扩展方法来创建调用管道,以便在此管道上安装拦截器。
 
-For example:
+例如:
 
 ```csharp
 Pipeline pipeline = new Pipeline()
@@ -50,11 +43,8 @@ Pipeline pipeline = new Pipeline()
     .Into(clientConnection);
 ```
 
-You need to specify the last invoker of the pipeline with `Into`. It's usually a client connection or a connection
-cache, but it can also be another pipeline since `Pipeline` is itself an invoker.
-
-When you make an invocation on a pipeline, the request goes through this chain of invokers. On the way back, the
-incoming response goes through the same chain of invokers in reverse order.
+需要使用 `Into` 指定管道的最后一个调用器。 它通常是客户端连接或连接缓存,但它也可以是另一个管道,因为 `Pipeline` 本身就是调用器。
+当在管道上进行调用时,请求会经过该调用器链。在返回的途中,传入的响应以相反的顺序穿过同一条调用者链。
 
 ```mermaid
 ---
@@ -66,9 +56,6 @@ flowchart LR
     connection -- response --> ti -- response --> i2 -- response --> i1 -- response --> app
 ```
 
-The order in which you install these interceptors is often important. The first interceptor you install is the first
-interceptor to execute. With the pipeline we created above, the logger interceptor executes first, then calls
-`InvokeAsync` on the compressor interceptor, and then finally the compressor interceptor calls `InvokeAsync` on the
-client connection.
+安装这些拦截器的顺序很重要。 安装的第一个拦截器是第一个执行的拦截器。通过上面创建的管道，日志拦截器首先执行,然后在压缩拦截器上调用 `InvokeAsync`，最后压缩拦截器在客户端连接上调用 `InvokeAsync`。
 
 [Pipeline]: csharp:IceRpc.Pipeline
